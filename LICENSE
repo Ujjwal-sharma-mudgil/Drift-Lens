@@ -1,0 +1,55 @@
+"""
+Generates a toy "baseline" and "current" dataset with a few injected
+drift patterns, so you can try driftlens immediately without hunting for
+real data:
+
+  - `signup_age`: mean shifts upward in current (population aging)
+  - `plan_type`:  a new category appears in current ("enterprise")
+  - `session_count`: gets a heavier tail in current (more power users)
+  - `region`: stays stable (control column)
+  - `is_active`: stays stable (control column)
+
+Run:
+    python examples/generate_sample_data.py
+"""
+
+import numpy as np
+import pandas as pd
+
+RNG = np.random.default_rng(42)
+
+
+def make_baseline(n=2000):
+    return pd.DataFrame(
+        {
+            "signup_age": RNG.normal(32, 6, n).round(1),
+            "session_count": RNG.poisson(5, n),
+            "plan_type": RNG.choice(["free", "basic", "pro"], size=n, p=[0.6, 0.3, 0.1]),
+            "region": RNG.choice(["us", "eu", "apac"], size=n, p=[0.5, 0.3, 0.2]),
+            "is_active": RNG.choice([True, False], size=n, p=[0.8, 0.2]),
+        }
+    )
+
+
+def make_current(n=2000):
+    return pd.DataFrame(
+        {
+            "signup_age": RNG.normal(38, 7, n).round(1),  # drift: older users
+            "session_count": np.concatenate(
+                [RNG.poisson(5, int(n * 0.85)), RNG.poisson(25, int(n * 0.15))]
+            ),  # drift: heavier tail
+            "plan_type": RNG.choice(
+                ["free", "basic", "pro", "enterprise"], size=n, p=[0.45, 0.3, 0.15, 0.10]
+            ),  # drift: new category + share shift
+            "region": RNG.choice(["us", "eu", "apac"], size=n, p=[0.5, 0.3, 0.2]),  # stable
+            "is_active": RNG.choice([True, False], size=n, p=[0.8, 0.2]),  # stable
+        }
+    )
+
+
+if __name__ == "__main__":
+    baseline = make_baseline()
+    current = make_current()
+    baseline.to_csv("examples/sample_baseline.csv", index=False)
+    current.to_csv("examples/sample_current.csv", index=False)
+    print("Wrote examples/sample_baseline.csv and examples/sample_current.csv")
