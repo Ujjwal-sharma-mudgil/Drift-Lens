@@ -74,7 +74,7 @@ See [`docs/USAGE.md`](docs/USAGE.md) for the full CLI/library reference and
 ## Installation
 
 ```bash
-git clone https://github.com/yourname/driftlens.git
+git clone https://github.com/Ujjwal-sharma-mudgil/driftlens.git
 cd driftlens
 pip install -e ".[dev]"   # [dev] pulls in pytest for running tests
 ```
