@@ -177,4 +177,15 @@ def _js_divergence_categorical(baseline: pd.Series, current: pd.Series) -> float
 def _js_from_counts(p_counts: np.ndarray, q_counts: np.ndarray) -> float:
     p = p_counts.astype(float)
     q = q_counts.astype(float)
-    if p.sum()
+    if p.sum() == 0 or q.sum() == 0:
+        return 0.0
+    p = p / p.sum()
+    q = q / q.sum()
+    m = 0.5 * (p + q)
+
+    def _kl(a, b):
+        mask = a > 0
+        return float(np.sum(a[mask] * np.log2(a[mask] / b[mask])))
+
+    js = 0.5 * _kl(p, m) + 0.5 * _kl(q, m)
+    return float(np.clip(js, 0.0, 1.0))
