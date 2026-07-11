@@ -19,3 +19,6 @@ dependencies = [
 dev = [
     "unittest"
 ]
+
+[tool.setuptools]
+py-modules = ["anomaly", "report", "generate_sample_data"]
