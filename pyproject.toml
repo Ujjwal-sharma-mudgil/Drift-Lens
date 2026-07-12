@@ -19,5 +19,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = []
 
+[project.scripts]
+driftlens = "cli:main"
+
 [tool.setuptools]
-py-modules = ["core", "anomaly", "report", "generate_sample_data"]
+py-modules = ["core", "anomaly", "report", "cli", "generate_sample_data"]
