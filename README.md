@@ -1,6 +1,7 @@
 # 🔍 DriftLens
 
 **Catch data drift before your model does.**
+<img width="512" height="512" alt="driftlens-logo" src="https://github.com/user-attachments/assets/64f99ff3-a5f3-4149-a039-5d9820faca8e" />
 
 DriftLens is a lightweight Python library and CLI for detecting statistical
 drift between two tabular datasets (e.g. training data vs. production
